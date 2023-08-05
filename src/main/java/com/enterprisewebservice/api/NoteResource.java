@@ -108,12 +108,12 @@ public class NoteResource {
             String keycloakSubject = result.getData().getUserProfile().getKeycloaksubject();
 
             // Create the index
-            redisSearchIndexer.createIndex(keycloakSubject);
+            redisSearchIndexer.createIndex();
 
             EmbeddingResponse embeddingResponse = embeddingService.generateEmbeddings(ChunkingService.chunkObject(note));
 
             // Index the embeddings
-            redisSearchIndexer.indexEmbeddings(embeddingResponse, note.getId().toString(), note.getName(), note.getRichText());
+            redisSearchIndexer.indexEmbeddings(embeddingResponse, note.getId().toString(), note.getName(), note.getRichText(), keycloakSubject);
 
              // Fetch the TaskNote objects by Note id
             StrapiServiceResponse<List<TaskNote>> taskNotes = taskNoteService.getByNoteId(note.getId().toString(), false);

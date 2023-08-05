@@ -71,12 +71,12 @@ public class GPTAssessmentResource {
             String keycloakSubject = result.getData().getUserProfile().getKeycloaksubject();
 
             // Create the index
-            redisSearchIndexer.createIndex(keycloakSubject);
+            redisSearchIndexer.createIndex();
 
             EmbeddingResponse embeddingResponse = embeddingService.generateEmbeddings(ChunkingService.chunkObject(note));
 
             // Index the embeddings
-            redisSearchIndexer.indexEmbeddings(embeddingResponse, note.getId().toString(), note.getName(), note.getRichText());
+            redisSearchIndexer.indexEmbeddings(embeddingResponse, note.getId().toString(), note.getName(), note.getRichText(), keycloakSubject);
 
             return Response.ok(note).build(); // returns the note object
 

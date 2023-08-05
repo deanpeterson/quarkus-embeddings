@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
+import redis.clients.jedis.search.Document;
 import redis.clients.jedis.search.SearchResult;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ArticleSearchService {
     public String searchArticles(String keycloakSubject, EmbeddingResponse queryEmbedding, int topN) throws Exception {
     
         // Search in Redis and get the embeddings
-        Entry<SearchResult, Map<String, Object>> results = redisSearchIndexer.vectorSimilarityQuery(keycloakSubject, queryEmbedding);
+        List<Document> results = redisSearchIndexer.vectorSimilarityQuery(keycloakSubject, queryEmbedding);
 
         // Get the articles from the results
         return redisSearchIndexer.getMessage(results);
